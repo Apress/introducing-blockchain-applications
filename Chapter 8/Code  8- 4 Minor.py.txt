@@ -1,0 +1,25 @@
+@app.route('/mine', methods=['GET'])
+def mine():
+ 
+    last_block = blockchain.last_block
+    last_proof = last_block['proof']
+    proof = blockchain.proof_of_work(last_proof)
+
+
+    blockchain.new_transaction(
+        sender="0",
+        recipient=node_identifier,
+        amount=1,
+    )
+
+
+    block = blockchain.new_block(proof=proof, previous_hash=0)
+
+    response = {
+        'message': "New Block Forged",
+        'index': block['index'],
+        'transactions': block['transactions'],
+        'proof': block['proof'],
+       
+    }
+    return jsonify(response), 200

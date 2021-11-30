@@ -1,0 +1,15 @@
+int64_t GetBlockValue(int nHeight, int64_t nFees)
+{
+    int64_t nSubsidy = 50 * COIN;
+    int halvings = nHeight / Params().SubsidyHalvingInterval();
+
+        if (halvings >= 64)
+        return nFees;
+
+    // Every 210,000 blocks, or about every 4 years, the subsidy is decreased in half..
+    nSubsidy >>= halvings;
+
+    return nSubsidy + nFees;
+}
+
+

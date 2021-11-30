@@ -1,0 +1,43 @@
+from hashlib import sha256
+x = 10
+y = 0  # We don't know what y should be yet...
+while sha256(f'{x*y}'.encode()).hexdigest()[-1] != "0":
+    y += 1
+print(f'The solution is y = {y}')
+
+ @staticmethod
+    def hash(block: Dict[str, Any]) -> str:
+        """
+        Creates a SHA-256 hash of a Block
+        :param block: Block
+        """
+
+        # We must make sure that the Dictionary is Ordered, or we'll have inconsistent hashes
+        block_string = json.dumps(block, sort_keys=True).encode()
+        return hashlib.sha256(block_string).hexdigest()
+        
+            def proof_of_work(self, last_proof: int) -> int:
+        """
+        Simple Proof of Work Algorithm:
+         - Find a number 0' such that hash(00') contains leading 4 zeroes, where 0 is the previous 0'
+         - 0 is the previous proof, and 0' is the new proof
+        """
+
+        proof = 0
+        while self.valid_proof(last_proof, proof) is False:
+            proof += 1
+
+        return proof
+
+    @staticmethod
+    def valid_proof(last_proof: int, proof: int) -> bool:
+        """
+        Validates the Proof
+        :param last_proof: Previous Proof
+        :param proof: Current Proof
+        :return: True if correct, False if not.
+        """
+
+        guess = f'{last_proof}{proof}'.encode()
+        guess_hash = hashlib.sha256(guess).hexdigest()
+        return guess_hash[:4] == "0000"
